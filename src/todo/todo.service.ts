@@ -24,5 +24,28 @@ export class TodoService {
         this.repo.create(todo);
         return await this.repo.save(todo);
       }
+
+      async updateTodoStatus(id: number, status: TodoStatus): Promise<TodoEntity> {
+        const todo = await this.repo.findOne({ where: { id } });
+    
+        if (!todo) {
+            throw new Error('Todo not found'); 
+        }
+    
+        
+        todo.status = status;
+        return await this.repo.save(todo); 
+    }
+
+    async deleteTodo(id: number): Promise<{ message: string }> {
+        const result = await this.repo.delete(id);
+
+        if (result.affected === 0) {
+            throw new Error('Todo not found or already deleted');
+        }
+
+        return { message: `Todo with ID ${id} has been deleted successfully` };
+    }
+    
       
 }
