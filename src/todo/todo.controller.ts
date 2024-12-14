@@ -1,7 +1,9 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, ValidationPipe } from '@nestjs/common';
 import { TodoService } from './todo.service';
+import { CreateTodoDto } from 'src/DTO/create-dto.dto';
 
 @Controller('todo')
+
 export class TodoController {
     constructor (private todoservice:TodoService){}
     @Get()
@@ -10,8 +12,8 @@ export class TodoController {
     }
 
     @Post()
-    createNewTodo(@Body() data){
-     const {title,description} = data
-      return this.todoservice.createNewTodo( title, description)
+    createNewTodo(@Body(ValidationPipe) data:CreateTodoDto){
+    
+      return this.todoservice.createNewTodo(data)
     }
 }
